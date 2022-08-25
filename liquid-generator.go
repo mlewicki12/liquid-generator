@@ -2,6 +2,6 @@ package liquidgenerator
 
 import "fmt"
 
-func main() {
+func Print() {
 	fmt.Printf("hello world\n")
 }
