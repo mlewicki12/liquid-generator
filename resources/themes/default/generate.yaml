@@ -1,0 +1,5 @@
+---
+- op: compile
+  from: scss
+  file: style.scss
+  out: style.css
