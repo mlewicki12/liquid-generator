@@ -3,33 +3,26 @@ package liquidgenerator
 import (
 	"fmt"
 	"log"
+	"os"
 
 	liquid "github.com/osteele/liquid"
 )
 
 var engine *liquid.Engine = liquid.NewEngine()
 
-func Print() {
-	fmt.Printf("hello world\n")
-}
+type Variables = liquid.Bindings
 
-func GenerateTemplate() {
-	data := read("resources/themes/pink/generate.yaml")
-	for k, v := range data {
-		fmt.Printf("[%v]: %v\n", k, v)
+// GenerateTemplate takes a path to a Liquid template and variables and generates a Component out of it
+func GenerateTemplate(path string, bindings Variables) ([]byte, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("error generating a template\n%v", err)
 	}
 
-	template := `<h1>{{ page.title }}</h1>`
-	bindings := liquid.Bindings{
-		"page": liquid.Bindings{
-			"title": "Introduction",
-		},
-	}
-
-	out, err := engine.ParseAndRenderString(template, bindings)
+	out, err := engine.ParseAndRender(data, bindings)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	fmt.Println(out)
+	return out, nil
 }
