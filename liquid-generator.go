@@ -7,15 +7,21 @@ import (
 	liquid "github.com/osteele/liquid"
 )
 
+var engine *liquid.Engine = liquid.NewEngine()
+
 func Print() {
 	fmt.Printf("hello world\n")
 }
 
 func GenerateTemplate() {
-	engine := liquid.NewEngine()
+	data := read("resources/themes/pink/generate.yaml")
+	for k, v := range data {
+		fmt.Printf("[%v]: %v\n", k, v)
+	}
+
 	template := `<h1>{{ page.title }}</h1>`
-	bindings := map[string]interface{}{
-		"page": map[string]interface{}{
+	bindings := liquid.Bindings{
+		"page": liquid.Bindings{
 			"title": "Introduction",
 		},
 	}
